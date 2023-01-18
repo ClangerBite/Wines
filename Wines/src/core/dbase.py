@@ -56,18 +56,24 @@ class WineDB:
         print("*" * 15)
 
     def create_wine_table(self):
-        with self.connection:
-            self.cursor.execute(
-                """CREATE TABLE wines (    
-                    wineID text,
-                    name text,
-                    colour text,
-                    country text,
-                    region text,
-                    subregion text,
-                    grapetype text
-                )"""
-            )
+        
+        table_name= "wines"
+        sql = "SELECT name FROM sqlite_master WHERE type='table' AND name = :table"
+        param = {"table": table_name}
+        table_exists = bool(self.execute(sql, param))
+        
+        if not table_exists:
+            sql = """CREATE TABLE wines (    
+                        wineID text,
+                        name text,
+                        colour text,
+                        country text,
+                        region text,
+                        subregion text,
+                        grapetype text
+                    )"""
+            self.execute(sql)
+            print(f"Table '{table_name}' created")        
         # don't need country or region as can include in separate look-up table based on subregion
         # 5 Datatypes - null (has a null value); integer; real; text; blob (stored exactly as input - eg pictures, audio, etc)
 
