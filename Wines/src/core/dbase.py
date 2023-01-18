@@ -1,12 +1,14 @@
 import sqlite3
 
 from .datastructures import Wine
+from .directorymanager import directory, dbase_folder
 
 
 class WineDB:
     def __init__(self):
-        self.connection = sqlite3.connect(":memory:")
-        self.cursor = self.connection.cursor()
+        with directory(dbase_folder):
+            self.connection = sqlite3.connect(":memory:")
+            self.cursor = self.connection.cursor()
 
         wine1 = Wine(
             "W0001",
@@ -20,7 +22,7 @@ class WineDB:
         wine2 = Wine(
             "W0002",
             "Chateau Margaux",
-            "Red",
+            "White",
             "France",
             "Bordeaux",
             "St Julien",
@@ -43,14 +45,24 @@ class WineDB:
         for wine in wines:
             print(wine)
         print("*" * 15)
+        
+        wines = self.fetch_by_country_and_name_and_reverse_colour_order("France")
+        print("Name and reverse colour order")  # No need for sort index in transactions application?
+        for wine in wines:
+            print(wine)
+        print("*" * 15)
 
         print("Print all rows")
         self.print_DB_rows()
         print("*" * 15)
 
-        self.delete_record(wine1)
-        wines = self.fetch_by_colour("Red")
-        print("Fetch reds")
+        self.delete_record(1)  # Best to use rowid if you are deleting or updating a record - this is its unique identifier - no need to wineID etc
+        print("Deleted record 1 - reprint all rows")
+        self.print_DB_rows()
+        print("*" * 15)
+        
+        wines = self.fetch_by_colour("White")
+        print("Fetch whites")
         for wine in wines:
             print(wine)
         print("*" * 15)
@@ -86,7 +98,7 @@ class WineDB:
         return self.cursor.fetchall()
         # NB fetchone() for next row or fetchmany(X) for X rows
 
-    def insert_record(self, wine):
+    def insert_record(self, wine):  # Can also pass over a list of wines and use 'executemany' with the parameter being the list - do a function for this to read from excel spreadsheet
         sql = "INSERT INTO wines VALUES (:wineID, :name, :colour, :country, :region, :subregion, :grapetype)"
         param = {
             "wineID": wine.wineID,
@@ -99,9 +111,9 @@ class WineDB:
         }
         self.execute(sql, param)
 
-    def delete_record(self, wine):
-        sql = "DELETE from wines WHERE wineID = :wineID"
-        param = {"wineID": wine.wineID}
+    def delete_record(self, rowid):
+        sql = "DELETE from wines WHERE rowid = :rowid"
+        param = {"rowid": rowid}
         self.execute(sql, param)
 
     def update_colour(self, wine, colour):
@@ -113,12 +125,18 @@ class WineDB:
         self.execute(sql, param)
 
     def fetch_by_colour(self, colour):
-        sql = "SELECT * FROM wines WHERE colour = :colour"
+        sql = "SELECT rowid, * FROM wines WHERE colour = :colour" 
+        # Can add more by using AND or OR afterwards | can also use LIKE with % as asterisk - eg name LIKE 'Ch%' or LIKE '%gmail.com' or date < xxx - use brackets if combining AND + OR
         param = {"colour": colour}
+        return self.execute(sql, param)
+    
+    def fetch_by_country_and_name_and_reverse_colour_order(self, country):
+        sql = "SELECT rowid, * FROM wines WHERE country = :country ORDER BY name ASC, colour DESC"
+        param = {"country": country}
         return self.execute(sql, param)
 
     def print_DB_rows(self):
-        sql = "SELECT * FROM wines"
+        sql = "SELECT rowid, * FROM wines"
         rows = self.execute(sql)
         for row in rows:
             print(row)

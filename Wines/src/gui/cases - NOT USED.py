@@ -4,7 +4,7 @@ from PyQt6 import uic
 from PyQt6.QtGui import QPixmap
 from PyQt6.QtWidgets import QFileDialog, QLabel, QMainWindow, QPushButton
 
-from ..core.foldermanager import GUI_folder, invoice_folder, label_folder
+from ..core.directorymanager import GUI_folder, invoice_folder, label_folder
 from ..core.loaddata import wine1
 
 

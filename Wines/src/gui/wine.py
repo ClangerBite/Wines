@@ -4,7 +4,7 @@ from PyQt6 import uic
 from PyQt6.QtGui import QPixmap, QFont
 from PyQt6.QtWidgets import QFileDialog, QLabel, QMainWindow, QPushButton
 
-from ..core.foldermanager import GUI_folder, invoice_folder, label_folder
+from ..core.directorymanager import directory, gui_folder, label_folder, invoice_folder
 from ..core.loaddata import review1, wine1, vintage1
 
 
@@ -13,7 +13,7 @@ class DisplayWine(QMainWindow):
         super().__init__()
 
         # Load the UI file and define the links
-        with GUI_folder():
+        with directory(gui_folder):
             uic.loadUi("wine.ui", self)
 
         # Wine details in UI
@@ -112,7 +112,7 @@ class DisplayWine(QMainWindow):
         self.drinkingwindow.setText(review.drinkingwindow)
         self.reviewdate.setText(review.reviewdate)        
 
-        with label_folder():
+        with directory(label_folder):
             filename = wine.wineID + " - Label.jpg"
             self.pixmap = QPixmap(filename)
         self.picture.setPixmap(self.pixmap)
