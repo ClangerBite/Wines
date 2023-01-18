@@ -5,7 +5,7 @@ from PyQt6.QtGui import QPixmap, QFont
 from PyQt6.QtWidgets import QFileDialog, QLabel, QMainWindow, QPushButton
 
 from ..core.foldermanager import GUI_folder, invoice_folder, label_folder
-from ..core.loaddata import review1, wine1
+from ..core.loaddata import review1, wine1, vintage1
 
 
 class DisplayWine(QMainWindow):
@@ -58,22 +58,22 @@ class DisplayWine(QMainWindow):
 
     def populate(self):
         def formatsize(vol: bool):
-            if wine.btlformatcl == 75:
+            if vintage.btlformatcl == 75:
                 if vol == True:
                     return "75cl"
                 else:
                     return "Bottles"
-            elif wine.btlformatcl == 150:
+            elif vintage.btlformatcl == 150:
                 if vol == True:
                     return "150cl"
                 else:
                     return "Magnums"
-            elif wine.btlformatcl == 37.5:
+            elif vintage.btlformatcl == 37.5:
                 if vol == True:
                     return "37.5cl"
                 else:
                     return "Half-bottles"
-            elif wine.btlformatcl == 50:
+            elif vintage.btlformatcl == 50:
                 if vol == True:
                     return "50cl"
                 else:
@@ -81,26 +81,27 @@ class DisplayWine(QMainWindow):
 
         # Set the wine to a Wine class object (temporarily set to wine1)
         wine = wine1
+        vintage = vintage1
         review = review1
         
         # Set the GUI display
         self.wineID.setText(wine.wineID)
         self.winename.setText(wine.name)
-        self.vintage.setText(str(wine.vintage))
+        self.vintage.setText(str(vintage.vintage))
         self.country.setText(wine.country)
         self.region.setText(wine.region)
         self.subregion.setText(wine.subregion)
         self.grapetype.setText(wine.grapetype)
         self.colour.setText(wine.colour)
-        self.caseqty.setText(str(wine.caseqty))
-        self.casesize.setText(str(wine.casesize) + " x " + formatsize(True))
-        self.bottleqty.setText(str(wine.bottleqty) + "  (" + formatsize(False) + ")")
-        self.equiv75clbottleqty.setText(str(wine.equiv75clbottleqty))
-        self.equiv75clbottlecost.setText("£ " + str(wine.equiv75clbottlecost))
-        self.casecost.setText("£ " + str(wine.casecost))
-        self.bottlecost.setText("£ " + str(wine.bottlecost))
+        self.caseqty.setText(str(vintage.caseqty))
+        self.casesize.setText(str(vintage.casesize) + " x " + formatsize(True))
+        self.bottleqty.setText(str(vintage.bottleqty) + "  (" + formatsize(False) + ")")
+        self.equiv75clbottleqty.setText(str(vintage.equiv75clbottleqty))
+        self.equiv75clbottlecost.setText("£ " + str(vintage.equiv75clbottlecost))
+        self.casecost.setText("£ " + str(vintage.casecost))
+        self.bottlecost.setText("£ " + str(vintage.bottlecost))
         self.total.setStyleSheet("background-color: lightyellow; color : #aa0000;")
-        self.total.setText("£ " + str(wine.casecost * wine.caseqty))
+        self.total.setText("£ " + str(vintage.casecost * vintage.caseqty))
         
         self.review.setText(review.text)
         self.reviewer.setStyleSheet("background-color: lightyellow")

@@ -2,14 +2,8 @@ from dataclasses import dataclass, field
 from datetime import datetime
 
 
-@dataclass(order=True)
-class Wine:
-    bottleqty: int = field(init=False, repr=False)
-    bottlecost: float = field(init=False, repr=False)
-    equiv75clbottleqty: float = field(init=False, repr=False)
-    equiv75clbottlecost: float = field(init=False, repr=False)   
-    sort_index: str = field(init=False, repr=False)
-    
+@dataclass(frozen=True)
+class Wine:    
     wineID: str
     name: str
     colour: str
@@ -17,8 +11,16 @@ class Wine:
     region: str         # don't need this as can include in separate look-up table based on subregion
     subregion: str
     grapetype: str
+
+@dataclass(order=True)
+class Vintage:
+    bottleqty: int = field(init=False, repr=False)
+    bottlecost: float = field(init=False, repr=False)
+    equiv75clbottleqty: float = field(init=False, repr=False)
+    equiv75clbottlecost: float = field(init=False, repr=False)   
+    sort_index: str = field(init=False, repr=False)
     
-    # belong in a vintage structure - link with wineID
+    wineID: str
     vintage: int
     
     # belong in a Case structure - link with vintageID

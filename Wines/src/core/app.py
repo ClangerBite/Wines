@@ -1,6 +1,7 @@
 from PyQt6.QtWidgets import QApplication
 
 from ..gui.wine import DisplayWine
+from .dbase import WineDB
 
 
 def guirun():
@@ -8,3 +9,4 @@ def guirun():
     mainwin = DisplayWine()
 
     app.exec()
+    wine = WineDB()

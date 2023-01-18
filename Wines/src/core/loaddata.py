@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from .datastructures import Review, Wine, Websites
+from .datastructures import Review, Wine, Vintage, Websites
 
 wine1 = Wine(
     "ID00001",
@@ -10,6 +10,10 @@ wine1 = Wine(
     "Bordeaux - Left Bank",
     "Pauillac",
     "Cabernet Sauvignon & Merlot",
+)
+
+vintage1 = Vintage(
+    "ID00001",
     2018,
     "BBR",
     "BBR",
@@ -24,7 +28,6 @@ wine1 = Wine(
     datetime(2023, 1, 4, 0, 0),
     datetime(2023, 1, 4, 0, 0),
 )
-
 
 review1 = Review(
     "ID00001",
