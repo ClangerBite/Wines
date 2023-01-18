@@ -1,8 +1,32 @@
 from datetime import datetime
 
 from ..database.queryDB import QueryDB
+from ..database.regiontableDB import RegionTableDB
 from ..database.winetableDB import WineTableDB
-from .datastructures import Review, Vintage, Websites, Wine
+from .datastructures import Region, Review, Vintage, Websites, Wine
+
+region1 = Region(
+    "St Julien",
+    "Bordeaux - Left Bank",
+    "France",
+)
+
+region2 = Region(
+    "Pauillac",
+    "Bordeaux - Left Bank",
+    "France",
+)
+
+# TODO Link region table to wine table and do a fetch
+
+regiontable = RegionTableDB()
+regiontable.insert(region1)
+regiontable.insert(region2)
+
+regiontable.print_all_rows()
+
+regiontable.amend_subregion_spelling("Pauillac", "Pauylac")
+regiontable.print_all_rows()
 
 wine1 = Wine(
     "Château Grand-Puy-Lacoste",
