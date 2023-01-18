@@ -85,7 +85,7 @@ class DisplayWine(QMainWindow):
         review = review1
         
         # Set the GUI display
-        self.wineID.setText(wine.wineID)
+        self.wineID.setText("TO BE DERIVED")
         self.winename.setText(wine.name)
         self.vintage.setText(str(vintage.vintage))
         self.country.setText(wine.country)
@@ -113,7 +113,7 @@ class DisplayWine(QMainWindow):
         self.reviewdate.setText(review.reviewdate)        
 
         with directory(label_folder):
-            filename = wine.wineID + " - Label.jpg"
+            filename = "ID00001" + " - Label.jpg" # TODO Get from DBASE
             self.pixmap = QPixmap(filename)
         self.picture.setPixmap(self.pixmap)
 

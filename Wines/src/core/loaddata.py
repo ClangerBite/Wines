@@ -3,7 +3,7 @@ from datetime import datetime
 from .datastructures import Review, Wine, Vintage, Websites
 
 wine1 = Wine(
-    "ID00001",
+    #"ID00001",
     "Château Grand-Puy-Lacoste",
     "Red",
     "France",

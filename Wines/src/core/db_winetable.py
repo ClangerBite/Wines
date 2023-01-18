@@ -1,17 +1,17 @@
 import sqlite3
 
 from .datastructures import Wine
-from .directorymanager import directory, dbase_folder
+from .directorymanager import dbase_folder, directory
 
 
-class WineDB:
+class WineDBTable:
     def __init__(self):
         with directory(dbase_folder):
             self.connection = sqlite3.connect(":memory:")
             self.cursor = self.connection.cursor()
 
         wine1 = Wine(
-            "W0001",
+            # "W0001",
             "Chateau Gloria",
             "Red",
             "France",
@@ -20,7 +20,7 @@ class WineDB:
             "Cab Sav",
         )
         wine2 = Wine(
-            "W0002",
+            # "W0002",
             "Chateau Margaux",
             "White",
             "France",
@@ -39,15 +39,17 @@ class WineDB:
             print(wine)
         print("*" * 15)
 
-        self.update_colour(wine1, "Blue")
+        self.update_colour(1, "Blue")
         wines = self.fetch_by_colour("Blue")
         print("Colour change")
         for wine in wines:
             print(wine)
         print("*" * 15)
-        
+
         wines = self.fetch_by_country_and_name_and_reverse_colour_order("France")
-        print("Name and reverse colour order")  # No need for sort index in transactions application?
+        print(
+            "Name and reverse colour order"
+        )  # No need for sort index in transactions application?
         for wine in wines:
             print(wine)
         print("*" * 15)
@@ -56,11 +58,12 @@ class WineDB:
         self.print_DB_rows()
         print("*" * 15)
 
-        self.delete_record(1)  # Best to use rowid if you are deleting or updating a record - this is its unique identifier - no need to wineID etc
+        self.delete_record(1)
+        # Best to use rowid if you are deleting or updating a record - this is its unique identifier - no need to wineID etc
         print("Deleted record 1 - reprint all rows")
         self.print_DB_rows()
         print("*" * 15)
-        
+
         wines = self.fetch_by_colour("White")
         print("Fetch whites")
         for wine in wines:
@@ -68,24 +71,16 @@ class WineDB:
         print("*" * 15)
 
     def create_wine_table(self):
-        
-        table_name= "wines"
-        sql = "SELECT name FROM sqlite_master WHERE type='table' AND name = :table"
-        param = {"table": table_name}
-        table_exists = bool(self.execute(sql, param))
-        
-        if not table_exists:
-            sql = """CREATE TABLE wines (    
-                        wineID text,
-                        name text,
-                        colour text,
-                        country text,
-                        region text,
-                        subregion text,
-                        grapetype text
-                    )"""
-            self.execute(sql)
-            print(f"Table '{table_name}' created")        
+        sql = """CREATE TABLE IF NOT EXISTS wines (    
+                    wineID INTEGER PRIMARY KEY AUTOINCREMENT,
+                    name text,
+                    colour text,
+                    country text,
+                    region text,
+                    subregion text,
+                    grapetype text
+                )"""
+        self.execute(sql)
         # don't need country or region as can include in separate look-up table based on subregion
         # 5 Datatypes - null (has a null value); integer; real; text; blob (stored exactly as input - eg pictures, audio, etc)
 
@@ -98,10 +93,12 @@ class WineDB:
         return self.cursor.fetchall()
         # NB fetchone() for next row or fetchmany(X) for X rows
 
-    def insert_record(self, wine):  # Can also pass over a list of wines and use 'executemany' with the parameter being the list - do a function for this to read from excel spreadsheet
+    def insert_record(
+        self, wine
+    ):  # Can also pass over a list of wines and use 'executemany' with the parameter being the list - do a function for this to read from excel spreadsheet
         sql = "INSERT INTO wines VALUES (:wineID, :name, :colour, :country, :region, :subregion, :grapetype)"
         param = {
-            "wineID": wine.wineID,
+            "wineID": None,
             "name": wine.name,
             "colour": wine.colour,
             "country": wine.country,
@@ -111,32 +108,32 @@ class WineDB:
         }
         self.execute(sql, param)
 
-    def delete_record(self, rowid):
-        sql = "DELETE from wines WHERE rowid = :rowid"
-        param = {"rowid": rowid}
+    def delete_record(self, wineID):
+        sql = "DELETE from wines WHERE wineID = :wineID"
+        param = {"wineID": wineID}
         self.execute(sql, param)
 
-    def update_colour(self, wine, colour):
+    def update_colour(self, wineID, colour):
         sql = "UPDATE wines SET colour = :colour WHERE wineID = :wineID"
         param = {
-            "wineID": wine.wineID,
+            "wineID": wineID,
             "colour": colour,
         }
         self.execute(sql, param)
 
     def fetch_by_colour(self, colour):
-        sql = "SELECT rowid, * FROM wines WHERE colour = :colour" 
+        sql = "SELECT * FROM wines WHERE colour = :colour"
         # Can add more by using AND or OR afterwards | can also use LIKE with % as asterisk - eg name LIKE 'Ch%' or LIKE '%gmail.com' or date < xxx - use brackets if combining AND + OR
         param = {"colour": colour}
         return self.execute(sql, param)
-    
+
     def fetch_by_country_and_name_and_reverse_colour_order(self, country):
-        sql = "SELECT rowid, * FROM wines WHERE country = :country ORDER BY name ASC, colour DESC"
+        sql = "SELECT * FROM wines WHERE country = :country ORDER BY name ASC, colour DESC"
         param = {"country": country}
         return self.execute(sql, param)
 
     def print_DB_rows(self):
-        sql = "SELECT rowid, * FROM wines"
+        sql = "SELECT * FROM wines"
         rows = self.execute(sql)
         for row in rows:
             print(row)

@@ -4,7 +4,7 @@ from datetime import datetime
 
 @dataclass(frozen=True)
 class Wine:    
-    wineID: str
+    #wineID: str
     name: str
     colour: str
     country: str        # don't need this as can include in separate look-up table based on subregion
