@@ -1,8 +1,8 @@
 from datetime import datetime
 
-from .datastructures import Review, Wine, Vintage, Websites
-from .db_winetable import WineDBTable
-from .db_query import QueryDataBase
+from ..database.queryDB import QueryDB
+from ..database.winetableDB import WineTableDB
+from .datastructures import Review, Vintage, Websites, Wine
 
 wine1 = Wine(
     "Château Grand-Puy-Lacoste",
@@ -14,21 +14,21 @@ wine1 = Wine(
 )
 
 wine2 = Wine(
-            "Château Gloria",
-            "Red",
-            "France",
-            "Bordeaux",
-            "Paulliac",
-            "Cab Sav",
-        )
+    "Château Gloria",
+    "Red",
+    "France",
+    "Bordeaux",
+    "Paulliac",
+    "Cab Sav",
+)
 wine3 = Wine(
-            "Château Margaux",
-            "White",
-            "France",
-            "Bordeaux",
-            "St Julien",
-            "Cab Sav",
-        )
+    "Château Margaux",
+    "White",
+    "France",
+    "Bordeaux",
+    "St Julien",
+    "Cab Sav",
+)
 
 wine4 = Wine(
     "Château Grand-Puy-Lacoste",
@@ -39,13 +39,13 @@ wine4 = Wine(
     "Cabernet Sauvignon & Merlot",
 )
 
-winetable = WineDBTable()
-winetable.insert_record(wine1)
-winetable.insert_record(wine2)
-winetable.insert_record(wine3)
-winetable.insert_record(wine4)
+winetable = WineTableDB()
+winetable.insert(wine1)
+winetable.insert(wine2)
+winetable.insert(wine3)
+winetable.insert(wine4)
 
-query = QueryDataBase()
+query = QueryDB()
 
 wines = query.fetch_by_colour("Red")
 print("Fetch reds")
@@ -70,13 +70,13 @@ for wine in wines:
 print("*" * 15)
 
 print("Print all rows")
-winetable.print_DB_rows()
+winetable.print_all_rows()
 print("*" * 15)
 
-winetable.delete_record(1)
+winetable.delete(1)
 # Best to use rowid if you are deleting or updating a record - this is its unique identifier - no need to wineID etc
 print("Deleted record 1 - reprint all rows")
-winetable.print_DB_rows()
+winetable.print_all_rows()
 print("*" * 15)
 
 wines = query.fetch_by_colour("White")
@@ -84,12 +84,6 @@ print("Fetch whites")
 for wine in wines:
     print(wine)
 print("*" * 15)
-
-
-
-
-
-
 
 
 vintage1 = Vintage(
