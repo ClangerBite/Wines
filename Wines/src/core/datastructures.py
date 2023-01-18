@@ -3,8 +3,7 @@ from datetime import datetime
 
 
 @dataclass(frozen=True)
-class Wine:    
-    #wineID: str
+class Wine:
     name: str
     colour: str
     country: str        # don't need this as can include in separate look-up table based on subregion
@@ -20,7 +19,7 @@ class Vintage:
     equiv75clbottlecost: float = field(init=False, repr=False)   
     sort_index: str = field(init=False, repr=False)
     
-    wineID: str
+    wineID: int
     vintage: int
     
     # belong in a Case structure - link with vintageID

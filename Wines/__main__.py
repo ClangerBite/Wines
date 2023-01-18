@@ -1,7 +1,8 @@
-from src.core.app import guirun
+from src.core.app import run_gui
+
 
 def main():
-    guirun()
+    run_gui()
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

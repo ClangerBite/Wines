@@ -5,7 +5,8 @@ from PyQt6.QtGui import QPixmap, QFont
 from PyQt6.QtWidgets import QFileDialog, QLabel, QMainWindow, QPushButton
 
 from ..core.directorymanager import directory, gui_folder, label_folder, invoice_folder
-from ..core.loaddata import review1, wine1, vintage1
+#from ..core.loaddata import review1, wine1, vintage1
+from ..core.loaddata import *
 
 
 class DisplayWine(QMainWindow):

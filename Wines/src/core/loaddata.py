@@ -1,9 +1,10 @@
 from datetime import datetime
 
 from .datastructures import Review, Wine, Vintage, Websites
+from .db_winetable import WineDBTable
+from .db_query import QueryDataBase
 
 wine1 = Wine(
-    #"ID00001",
     "Château Grand-Puy-Lacoste",
     "Red",
     "France",
@@ -11,6 +12,85 @@ wine1 = Wine(
     "Pauillac",
     "Cabernet Sauvignon & Merlot",
 )
+
+wine2 = Wine(
+            "Château Gloria",
+            "Red",
+            "France",
+            "Bordeaux",
+            "Paulliac",
+            "Cab Sav",
+        )
+wine3 = Wine(
+            "Château Margaux",
+            "White",
+            "France",
+            "Bordeaux",
+            "St Julien",
+            "Cab Sav",
+        )
+
+wine4 = Wine(
+    "Château Grand-Puy-Lacoste",
+    "Orange",
+    "France",
+    "Bordeaux - Left Bank",
+    "Pauillac",
+    "Cabernet Sauvignon & Merlot",
+)
+
+winetable = WineDBTable()
+winetable.insert_record(wine1)
+winetable.insert_record(wine2)
+winetable.insert_record(wine3)
+winetable.insert_record(wine4)
+
+query = QueryDataBase()
+
+wines = query.fetch_by_colour("Red")
+print("Fetch reds")
+for wine in wines:
+    print(wine)
+print("*" * 15)
+
+winetable.update_colour(1, "Blue")
+
+wines = query.fetch_by_colour("Blue")
+print("Colour change")
+for wine in wines:
+    print(wine)
+print("*" * 15)
+
+wines = query.fetch_by_country_and_name_and_reverse_colour_order("France")
+print(
+    "Name and reverse colour order"
+)  # No need for sort index in transactions application?
+for wine in wines:
+    print(wine)
+print("*" * 15)
+
+print("Print all rows")
+winetable.print_DB_rows()
+print("*" * 15)
+
+winetable.delete_record(1)
+# Best to use rowid if you are deleting or updating a record - this is its unique identifier - no need to wineID etc
+print("Deleted record 1 - reprint all rows")
+winetable.print_DB_rows()
+print("*" * 15)
+
+wines = query.fetch_by_colour("White")
+print("Fetch whites")
+for wine in wines:
+    print(wine)
+print("*" * 15)
+
+
+
+
+
+
+
 
 vintage1 = Vintage(
     "ID00001",

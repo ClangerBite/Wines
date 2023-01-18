@@ -11,6 +11,8 @@ gui_folder = "Wines/src/gui"
 label_folder = "Wines/resources/labels"
 invoice_folder = "Wines/resources/invoices"
 dbase_folder = "Wines/resources/database"
+
+dbase_name = "wines.db"
         
 @contextmanager
 def directory(folder):
